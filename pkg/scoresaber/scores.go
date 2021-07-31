@@ -31,6 +31,8 @@ func ExtractPlayerIDFromURL(u string) (string, error) {
 		return "", errors.New("ID part not found")
 	}
 
+	id = strings.Split(uri.Path, "&")[0] // there is a weird & in some user profiles
+
 	return id, nil
 }
 
