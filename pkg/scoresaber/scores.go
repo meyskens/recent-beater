@@ -55,6 +55,27 @@ func GetRecentScores(playerID string, page int) ([]Score, error) {
 	return data.Scores, nil
 }
 
+// GetTopScores gets the top scores of a given player
+func GetTopScores(playerID string, page int) ([]Score, error) {
+	resp, err := http.Get(fmt.Sprintf("%s/player/%s/scores/top/%d", HOST, playerID, page))
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var data scoresAPIData
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return nil, err
+	}
+
+	return data.Scores, nil
+}
+
 // GetProfile gets the profile info of a given player
 func GetProfile(playerID string) (*Profile, error) {
 	resp, err := http.Get(fmt.Sprintf("%s/player/%s/full", HOST, playerID))

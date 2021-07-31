@@ -12,10 +12,17 @@ import (
 	"github.com/meyskens/recent-beater/pkg/scoresaber"
 )
 
+type Mode string
+
+const (
+	ModeRecent Mode = "recent"
+	ModeTop    Mode = "top"
+)
+
 func init() {
 	registers = append(registers, func(e *echo.Echo, h *HTTPHandler) {
 		e.GET("/playlist/", h.GeneratePlaylist)
-		e.GET("/playlist/:id/:pages/:filename", h.GeneratePlaylistWithID)
+		e.GET("/playlist/:id/:pages/:mode/:filename", h.GeneratePlaylistWithID)
 	})
 }
 
@@ -26,12 +33,17 @@ func (h *HTTPHandler) GeneratePlaylistWithID(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "player id not specified"})
 	}
 
+	mode := ModeRecent
+	if c.Param("mode") == "top" {
+		mode = ModeTop
+	}
+
 	amount := 1
 	if i, err := strconv.ParseInt(c.Param("pages"), 10, 64); err == nil && i > 0 {
 		amount = int(i)
 	}
 
-	return h.handlePlaygen(c, pid, amount)
+	return h.handlePlaygen(c, pid, amount, mode)
 }
 
 func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
@@ -50,6 +62,11 @@ func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
 		amount = int(i)
 	}
 
+	mode := ModeRecent
+	if c.QueryParam("mode") == "top" {
+		mode = ModeTop
+	}
+
 	if c.QueryParam("oneclick") == "true" {
 		profile, err := scoresaber.GetProfile(id)
 		if err != nil {
@@ -57,13 +74,13 @@ func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
 		}
 
 		// bsplaylist has no support for GET parameters
-		return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("bsplaylist://playlist/https://recentbeat.com/playlist/%s/%d/BEAT_%s_%d.bplist\n", id, amount, profile.PlayerInfo.PlayerName, time.Now().Unix()))
+		return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("bsplaylist://playlist/https://recentbeat.com/playlist/%s/%d/%s/BEAT_%s_%d.bplist\n", id, amount, mode, profile.PlayerInfo.PlayerName, time.Now().Unix()))
 	}
 
-	return h.handlePlaygen(c, id, amount)
+	return h.handlePlaygen(c, id, amount, mode)
 }
 
-func (h *HTTPHandler) handlePlaygen(c echo.Context, id string, amount int) error {
+func (h *HTTPHandler) handlePlaygen(c echo.Context, id string, amount int, mode Mode) error {
 	if id == "76561198407185197" {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "No Dirk, thy shall not use my own tools against me"})
 	}
@@ -74,7 +91,14 @@ func (h *HTTPHandler) handlePlaygen(c echo.Context, id string, amount int) error
 
 	var scores []scoresaber.Score
 	for i := 0; i < amount; i++ {
-		s, err := scoresaber.GetRecentScores(id, i+1)
+		var s []scoresaber.Score
+		var err error
+		if mode == ModeRecent {
+			s, err = scoresaber.GetRecentScores(id, i+1)
+
+		} else if mode == ModeTop {
+			s, err = scoresaber.GetTopScores(id, i+1)
+		}
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
 		}
