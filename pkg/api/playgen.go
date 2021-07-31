@@ -68,6 +68,10 @@ func (h *HTTPHandler) handlePlaygen(c echo.Context, id string, amount int) error
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "No Dirk, thy shall not use my own tools against me"})
 	}
 
+	if amount > 10 {
+		amount = 10 // sorry i am not blowing my rate limit
+	}
+
 	var scores []scoresaber.Score
 	for i := 0; i < amount; i++ {
 		s, err := scoresaber.GetRecentScores(id, i+1)
