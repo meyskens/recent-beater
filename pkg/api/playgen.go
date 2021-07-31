@@ -57,7 +57,7 @@ func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
 		}
 
 		// bsplaylist has no support for GET parameters
-		return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("bsplaylist://playlist/https://recentbeat.com/playlist/%s/%d/BEAT_%s_%d.bplist\n", id, amount, profile.PlayerInfo.PlayerName, time.Now().UTC().Unix()))
+		return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("bsplaylist://playlist/https://recentbeat.com/playlist/%s/%d/BEAT_%s_%d.bplist\n", id, amount, profile.PlayerInfo.PlayerName, time.Now().Unix()))
 	}
 
 	return h.handlePlaygen(c, id, amount)
