@@ -10,9 +10,10 @@ var registers []func(e *echo.Echo, h *HTTPHandler)
 
 func init() {
 	registers = append(registers, func(e *echo.Echo, h *HTTPHandler) {
-		e.GET("/", func(c echo.Context) error {
-			return c.String(http.StatusOK, "OwO")
-		})
+
+		assetHandler := http.FileServer(http.Dir("static"))
+		e.GET("/", echo.WrapHandler(assetHandler))
+		e.GET("/*", echo.WrapHandler(assetHandler))
 	})
 }
 
