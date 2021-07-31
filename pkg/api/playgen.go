@@ -74,7 +74,7 @@ func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
 		}
 
 		// bsplaylist has no support for GET parameters
-		return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("bsplaylist://playlist/https://recentbeat.com/playlist/%s/%d/%s/BEAT_%s_%d.bplist\n", id, amount, mode, profile.PlayerInfo.PlayerName, time.Now().Unix()))
+		return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("bsplaylist://playlist/https://recentbeat.com/playlist/%s/%d/%s/BEAT_%s_%s_%d.bplist\n", id, amount, mode, profile.PlayerInfo.PlayerName, mode, time.Now().Unix()))
 	}
 
 	return h.handlePlaygen(c, id, amount, mode)
@@ -116,7 +116,7 @@ func (h *HTTPHandler) handlePlaygen(c echo.Context, id string, amount int, mode 
 	}
 
 	pl := bplist.NewPlaylist()
-	pl.PlaylistTitle = fmt.Sprintf("BEAT %s", profile.PlayerInfo.PlayerName)
+	pl.PlaylistTitle = fmt.Sprintf("BEAT %s %s", mode, profile.PlayerInfo.PlayerName)
 	pl.PlaylistAuthor = "Recent Beater"
 
 	for _, score := range scores {

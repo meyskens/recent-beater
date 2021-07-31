@@ -7,6 +7,7 @@
 	let loading = false;
 	let url = "";
 	let pages = 1;
+	let mode = "recent"
 
 	async function checkURL() {
 		const res = await fetch(`https://recentbeat.com/check/?url=${encodeURIComponent(url)}`);
@@ -32,7 +33,7 @@
 			return
 		}
 
-		window.location = `/playlist/?url=${encodeURIComponent(url)}&pages=${pages}${oneclick ? "&oneclick=true" : ""}`;
+		window.location = `/playlist/?url=${encodeURIComponent(url)}&mode=${mode}&pages=${pages}${oneclick ? "&oneclick=true" : ""}`;
 		loading = false;
 	}
 
@@ -65,9 +66,9 @@
 	<div class="row justify-content-center my-4">
 		<div class="col-2">
 			<label for="type">Type</label>
-			<select class="form-select" id="type" aria-label="select type">
+			<select class="form-select" id="type" aria-label="select type" bind:value={mode}>
 				<option value="recent" selected>Recent Scores</option>
-				<option value="top" disabled>Top Scores (coming soon)</option>
+				<option value="top">Top Scores</option>
 			</select>
 		</div>
 		<div class="col-1">
