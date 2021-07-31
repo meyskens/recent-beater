@@ -27,7 +27,7 @@ func (h *HTTPHandler) GeneratePlaylistWithID(c echo.Context) error {
 	}
 
 	amount := 1
-	if i, err := strconv.ParseInt(c.Param("pages"), 10, 64); err != nil && i > 0 {
+	if i, err := strconv.ParseInt(c.Param("pages"), 10, 64); err == nil && i > 0 {
 		amount = int(i)
 	}
 
@@ -46,7 +46,7 @@ func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
 	}
 
 	amount := 1
-	if i, err := strconv.ParseInt(c.QueryParam("pages"), 10, 64); err != nil && i > 0 {
+	if i, err := strconv.ParseInt(c.QueryParam("pages"), 10, 64); err == nil && i > 0 {
 		amount = int(i)
 	}
 
