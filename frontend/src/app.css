@@ -3,3 +3,9 @@
 body {
     background-color: #1e1f26;
 }
+
+body {
+    height: 100vh;
+    background-size: cover;
+    overflow-x: hidden;
+}

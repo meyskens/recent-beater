@@ -28,6 +28,7 @@
 				position: 'top-center',
 			})
 			loading = false;
+			return
 		}
 
 		window.location = `/playlist/?url=${encodeURIComponent(url)}${oneclick ? "&oneclick=true" : ""}`;
