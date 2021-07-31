@@ -6,6 +6,7 @@
 
 	let loading = false;
 	let url = "";
+	let pages = 1;
 
 	async function checkURL() {
 		const res = await fetch(`https://recentbeat.com/check/?url=${encodeURIComponent(url)}`);
@@ -31,7 +32,7 @@
 			return
 		}
 
-		window.location = `/playlist/?url=${encodeURIComponent(url)}${oneclick ? "&oneclick=true" : ""}`;
+		window.location = `/playlist/?url=${encodeURIComponent(url)}&pages=${pages}${oneclick ? "&oneclick=true" : ""}`;
 		loading = false;
 	}
 
@@ -61,6 +62,25 @@
 			<input class="form-control form-control-lg" type="text" placeholder="https://scoresaber.com/u/765611979825216..." aria-label=".form-control-lg" bind:value={url}>
 		</div>
 	</div>
+	<div class="row justify-content-center my-4">
+		<div class="col-2">
+			<label for="type">Type</label>
+			<select class="form-select" id="type" aria-label="select type">
+				<option value="recent" selected>Recent Scores</option>
+				<option value="top" disabled>Top Scores (coming soon)</option>
+			</select>
+		</div>
+		<div class="col-1">
+			<label for="type">Pages</label>
+			<select class="form-select" aria-label="select type" bind:value={pages} >
+				<option value="1" selected>1</option>
+				{#each Array(9) as _, row}
+					<option value={row+2}>{row+2}</option>
+				{/each}
+			</select>
+		</div>
+	</div>
+
 	<div class="row justify-content-center my-4">
 		<div class="col-6 text-center">
 			<button on:click={handleBPList} disabled={loading} type="button" class="btn btn-lg btn-primary mx-1"><i class="bi bi-download"></i> .bplist</button>
