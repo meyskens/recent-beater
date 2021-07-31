@@ -53,7 +53,7 @@
 <section>
 	<div class="row justify-content-center my-4">
 		<div class="col-6 about text-center">
-			Recent Saber will give you a a Beat Saber playlist of the recent plays of a given ScoreSaber profile.
+			Recent Beater will give you a a Beat Saber playlist of the recent plays of a given ScoreSaber profile.
 		</div>
 	</div>
 	<div class="row justify-content-center my-4">
