@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/meyskens/recent-beater/pkg/bplist"
 
@@ -56,7 +57,7 @@ func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
 		}
 
 		// bsplaylist has no support for GET parameters
-		return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("bsplaylist://playlist/https://recentbeat.com/playlist/%s/%d/BEAT_%s.bplist\n", id, amount, profile.PlayerInfo.PlayerName))
+		return c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("bsplaylist://playlist/https://recentbeat.com/playlist/%s/%d/BEAT_%s_%s.bplist\n", id, amount, profile.PlayerInfo.PlayerName, time.Now().UTC().String()))
 	}
 
 	return h.handlePlaygen(c, id, amount)

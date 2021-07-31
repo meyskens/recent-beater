@@ -11,7 +11,7 @@ func (s *Score) ToBPlistSong() bplist.Song {
 	difParts := strings.Split(s.DifficultyRaw, "_")
 	if len(difParts) > 2 {
 		difficulties = append(difficulties, bplist.Difficulty{
-			Characteristic: "Standard",
+			Characteristic: strings.Replace(difParts[2], "Solo", "", -1),
 			Name:           difParts[1],
 		})
 	}
