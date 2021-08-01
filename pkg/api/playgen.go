@@ -81,9 +81,6 @@ func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
 }
 
 func (h *HTTPHandler) handlePlaygen(c echo.Context, id string, amount int, mode Mode) error {
-	if id == "76561198407185197" {
-		return c.JSON(http.StatusBadRequest, echo.Map{"error": "No Dirk, thy shall not use my own tools against me"})
-	}
 
 	if amount > 10 {
 		amount = 10 // sorry i am not blowing my rate limit
