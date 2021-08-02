@@ -84,6 +84,10 @@ func (h *HTTPHandler) GeneratePlaylist(c echo.Context) error {
 		opts.Pages = int(i)
 	}
 
+	if c.QueryParam("filterNoPP") == "true" {
+		opts.FilterNoPP = true
+	}
+
 	if c.QueryParam("mode") == "top" {
 		opts.Mode = modeTop
 	}
@@ -136,6 +140,17 @@ func (h *HTTPHandler) handlePlaygen(c echo.Context, opts options) error {
 		}
 
 		scores = append(scores, s...)
+	}
+
+	if opts.FilterNoPP {
+		var newScores []scoresaber.Score
+		for _, score := range scores {
+			if score.PP > 0 {
+				newScores = append(newScores, score)
+			}
+		}
+
+		scores = newScores
 	}
 
 	profile, err := scoresaber.GetProfile(opts.ID)
