@@ -3,6 +3,9 @@ package scoresaber
 import "time"
 
 type scoresAPIData struct {
+	Error struct {
+		Message string `json:"message"`
+	} `json:"error"`
 	Scores []Score `json:"scores"`
 }
 

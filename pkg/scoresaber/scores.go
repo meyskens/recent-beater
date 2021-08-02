@@ -54,6 +54,10 @@ func GetRecentScores(playerID string, page int) ([]Score, error) {
 		return nil, err
 	}
 
+	if data.Error.Message != "" {
+		return nil, errors.New(data.Error.Message)
+	}
+
 	return data.Scores, nil
 }
 
@@ -73,6 +77,10 @@ func GetTopScores(playerID string, page int) ([]Score, error) {
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		return nil, err
+	}
+
+	if data.Error.Message != "" {
+		return nil, errors.New(data.Error.Message)
 	}
 
 	return data.Scores, nil
